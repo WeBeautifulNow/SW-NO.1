@@ -1,0 +1,66 @@
+{
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.5/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.5",
+  "version": "1.0.0",
+  "id": "3373c29b-453c-43b0-8292-dbfc62b18cc2",
+  "packageName": "com.teams.sample.teamsconversationbot",
+  "developer": {
+    "name": "zero",
+    "websiteUrl": "https://www.microsoft.com",
+    "privacyUrl": "https://www.teams.com/privacy",
+    "termsOfUseUrl": "https://www.teams.com/termsofuser"
+  },
+  "icons": {
+    "outline": "icon-outline.png",
+    "color": "icon-color.png"
+  },
+  "name": {
+    "short": "SW NO.1",
+    "full": "SW NO.1"
+  },
+  "description": {
+    "short": "NO.89757",
+    "full": "真实的皮肤有温度 甚至能呼吸"
+  },
+  "accentColor": "#FFFFFF",
+  "bots": [
+    {
+      "botId": "270486ac-95b8-477a-8141-9ea644993aa0",
+      "scopes": [
+        "personal",
+        "groupchat",
+        "team"
+      ],
+      "supportsFiles": false,
+      "isNotificationOnly": false,
+      "commandLists": [
+        {
+          "scopes": [
+            "personal",
+            "groupchat",
+            "team"
+          ],
+          "commands": [
+            {
+              "title": "MentionMe",
+              "description": "Sends message with @mention of the sender"
+            },
+            {
+              "title": "Show Welcome",
+              "description": "Shows the welcome card"
+            },
+            {
+              "title": "MessageAllMembers",
+              "description": "Send 1 to 1 message to all members of the current conversation"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "permissions": [
+    "identity",
+    "messageTeamMembers"
+  ],
+  "validDomains": []
+}
