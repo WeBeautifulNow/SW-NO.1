@@ -64,31 +64,7 @@ namespace Microsoft.BotBuilderSamples.Bots
                     await MessageAllMembersAsync(turnContext, cancellationToken);
                     break;
                 case "Show Welcome":
-                    var value = new JObject { { "count", 0 } };
-                    
-                    var card = new HeroCard
-                    {
-                        Title = "Welcome Card",
-                        Text = "Bonjour à tous, je suis Microsoft Fire.(点击此处进行翻译)",
-                        Buttons = new List<CardAction>
-                        {
-                            new CardAction
-                            {
-                                Type= ActionTypes.MessageBack,
-                                Title = "Update Card",
-                                Text = "UpdateCardAction",
-                                Value = value
-                            },
-                            new CardAction
-                            {
-                                Type = ActionTypes.MessageBack,
-                                Title = "Message all members",
-                                Text = "MessageAllMembers"
-                            }
-                        }
-                    };
-
-                    await turnContext.SendActivityAsync(MessageFactory.Attachment(card.ToAttachment()));
+                    await ShowWelcome(turnContext);
                     break;
 
                 default:
@@ -191,7 +167,7 @@ namespace Microsoft.BotBuilderSamples.Bots
 
             var updatedActivity = MessageFactory.Attachment(card.ToAttachment());
             updatedActivity.Id = turnContext.Activity.ReplyToId;
-            await turnContext.UpdateActivityAsync(updatedActivity, cancellationToken);            
+            await turnContext.UpdateActivityAsync(updatedActivity, cancellationToken);
         }
 
         private async Task MentionActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
@@ -339,6 +315,35 @@ namespace Microsoft.BotBuilderSamples.Bots
 
             await turnContext.SendActivityAsync(MessageFactory.Attachment(card.ToAttachment()));
 
+        }
+
+        private async Task ShowWelcome(ITurnContext<IMessageActivity> turnContext)
+        {
+            var value = new JObject { { "count", 0 } };
+
+            var card = new HeroCard
+            {
+                Title = "Welcome Card",
+                Text = "Bonjour à tous, je suis Microsoft Fire.(点击此处进行翻译)",
+                Buttons = new List<CardAction>
+                        {
+                            new CardAction
+                            {
+                                Type= ActionTypes.MessageBack,
+                                Title = "Update Card",
+                                Text = "UpdateCardAction",
+                                Value = value
+                            },
+                            new CardAction
+                            {
+                                Type = ActionTypes.MessageBack,
+                                Title = "Message all members",
+                                Text = "MessageAllMembers"
+                            }
+                        }
+            };
+
+            await turnContext.SendActivityAsync(MessageFactory.Attachment(card.ToAttachment()));
         }
     }
 }
