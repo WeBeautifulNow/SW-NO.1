@@ -56,15 +56,6 @@ namespace Microsoft.BotBuilderSamples.Bots
                 case "roll":
                     await MentionRollActivityAsync(turnContext, cancellationToken);
                     break;
-                case "UpdateCardAction":
-                    await UpdateCardActivityAsync(turnContext, cancellationToken);
-                    break;
-                case "Delete":
-                    await DeleteCardActivityAsync(turnContext, cancellationToken);
-                    break;
-                case "Show Welcome":
-                    await ShowWelcome(turnContext);
-                    break;
 
                 default:
                     await turnContext.SendActivityAsync(reply, cancellationToken: cancellationToken);
