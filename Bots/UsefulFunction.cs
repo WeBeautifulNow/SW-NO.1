@@ -11,6 +11,7 @@ using Microsoft.Bot.Schema;
 using Microsoft.Bot.Schema.Teams;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace Microsoft.BotBuilderSamples.Bots
 {
@@ -57,22 +58,15 @@ namespace Microsoft.BotBuilderSamples.Bots
         {
             var members = await TeamsInfo.GetMembersAsync(turnContext, cancellationToken);
             Random rd = new Random();
-            var iterator = members.GetEnumerator();
-            int count = 1;
-            TeamsChannelAccount current = iterator.Current;
-            while (iterator.MoveNext())
-            {
-                count++;
-                if (rd.Next(count) == 0)
-                {
-                    current = iterator.Current;
-                }
-            }
+            
+            var membersArray = members.ToArray();
+            var tt = rd.Next(membersArray.Length);
+            var randomMember = membersArray[tt];
 
             var mention = new Mention
             {
-                Mentioned = current,
-                Text = $"<at>{XmlConvert.EncodeName(current.Name)}</at>",
+                Mentioned = randomMember,
+                Text = $"<at>{XmlConvert.EncodeName(randomMember.Name)}</at>",
             };
             var replyActivity = MessageFactory.Text($"就决定是你了，去吧 {mention.Text}.");
             replyActivity.Entities = new List<Entity> { mention };
