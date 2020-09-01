@@ -53,12 +53,12 @@ namespace Microsoft.BotBuilderSamples.Bots
             };
             await turnContext.SendActivityAsync(MessageFactory.Attachment(card.ToAttachment()));
         }
-        
+
         private async Task MentionRollActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
             var members = await TeamsInfo.GetMembersAsync(turnContext, cancellationToken);
             Random rd = new Random();
-            
+
             var membersArray = members.ToArray();
             var tt = rd.Next(membersArray.Length);
             var randomMember = membersArray[tt];
@@ -70,6 +70,60 @@ namespace Microsoft.BotBuilderSamples.Bots
             };
             var replyActivity = MessageFactory.Text($"就决定是你了，去吧 {mention.Text}.");
             replyActivity.Entities = new List<Entity> { mention };
+
+            await turnContext.SendActivityAsync(replyActivity, cancellationToken);
+        }
+
+        private async Task PairingProgramming(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
+        {
+            var teamsChannelId = turnContext.Activity.TeamsGetChannelId();
+            if (teamsChannelId != _MMDTeamGenaralChannelID)
+            {
+                await turnContext.SendActivityAsync("No permission for this command");
+                return;
+            }
+            var members = await TeamsInfo.GetMembersAsync(turnContext, cancellationToken);
+            var membersList = members.ToList();
+            var mentionText = "Hello every, here is weekly pairing programing. Next is God's choice: ";
+            var mentionList = new List<Entity> { };
+            Random rd = new Random();
+            while (membersList.Count > 1)
+            {
+                var firstIndex = rd.Next(membersList.Count);
+                var firstMember = membersList[firstIndex];
+                var firstMention = new Mention
+                {
+                    Mentioned = firstMember,
+                    Text = $"<at>{XmlConvert.EncodeName(firstMember.Name)}</at>",
+                };
+                membersList.RemoveAt(firstIndex);
+                var secondIndex = rd.Next(membersList.Count);
+                var secondMember = membersList[secondIndex];
+                var secondMention = new Mention
+                {
+                    Mentioned = secondMember,
+                    Text = $"<at>{XmlConvert.EncodeName(secondMember.Name)}</at>",
+                };
+                membersList.RemoveAt(secondIndex);
+                mentionText += firstMention.Text + " & " + secondMention.Text + "  ";
+                mentionList.Add(firstMention);
+                mentionList.Add(secondMention);
+            }
+
+            if (membersList.Count == 1)
+            {
+                var lastMember = membersList[0];
+                var lastMention = new Mention
+                {
+                    Mentioned = lastMember,
+                    Text = $"<at>{XmlConvert.EncodeName(lastMember.Name)}</at>",
+                };
+                mentionText += "And " + lastMention.Text + ", feel free to join each group of them.";
+                mentionList.Add(lastMention);
+            }
+            
+            var replyActivity = MessageFactory.Text(mentionText);
+            replyActivity.Entities = mentionList;
 
             await turnContext.SendActivityAsync(replyActivity, cancellationToken);
         }

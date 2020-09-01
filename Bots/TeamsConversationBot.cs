@@ -22,12 +22,14 @@ namespace Microsoft.BotBuilderSamples.Bots
         private string _appId;
         private string _appPassword;
         private string _authorPrincipalName;
+        private string _MMDTeamGenaralChannelID;
 
         public TeamsConversationBot(IConfiguration config)
         {
             _appId = config["MicrosoftAppId"];
             _appPassword = config["MicrosoftAppPassword"];
             _authorPrincipalName = "zheta@microsoft.com";
+            _MMDTeamGenaralChannelID = "19:fb37a43e619a4050bd722b299a308fe8@thread.tacv2";
         }
 
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
@@ -59,7 +61,10 @@ namespace Microsoft.BotBuilderSamples.Bots
                 case Constants.Roll.ShortName:
                     await MentionRollActivityAsync(turnContext, cancellationToken);
                     break;
-
+                case Constants.PairingProgramming.Name:
+                case Constants.PairingProgramming.ShortName:
+                    await PairingProgramming(turnContext, cancellationToken);
+                    break;
                 default:
                     await turnContext.SendActivityAsync(reply, cancellationToken: cancellationToken);
                     break;

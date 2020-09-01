@@ -25,5 +25,10 @@ namespace Microsoft.BotBuilderSamples.Bots
             internal const string Name = "Roll";
             internal const string ShortName = "r";
         }
+        internal static class PairingProgramming
+        {
+            internal const string Name = "PairingProgramming";
+            internal const string ShortName = "pp";
+        }
     }
 }
