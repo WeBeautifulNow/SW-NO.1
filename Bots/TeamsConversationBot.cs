@@ -46,7 +46,7 @@ namespace Microsoft.BotBuilderSamples.Bots
                     break;
                 case var someVal when someVal.StartsWith(Constants.SendMessageToAll.Name):
                     var sendInfo = someVal.Remove(0, someVal.IndexOf("+") + 1);
-                    await SendInfoToAllMember(turnContext, cancellationToken, sendInfo);
+                    await SendInfoToAllMemberAsync(turnContext, cancellationToken, sendInfo);
                     break;
                 case Constants.ShowAllCommands.Name:
                 case Constants.ShowAllCommands.ShortName:
@@ -63,7 +63,11 @@ namespace Microsoft.BotBuilderSamples.Bots
                     break;
                 case Constants.PairingProgramming.Name:
                 case Constants.PairingProgramming.ShortName:
-                    await PairingProgramming(turnContext, cancellationToken);
+                    await PairingProgrammingAsync(turnContext, cancellationToken);
+                    break;
+                case Constants.NextMember.Name:
+                case Constants.NextMember.ShortName:
+                    await MentionNextMemberAsync(turnContext, cancellationToken);
                     break;
                 default:
                     await turnContext.SendActivityAsync(reply, cancellationToken: cancellationToken);
@@ -76,7 +80,14 @@ namespace Microsoft.BotBuilderSamples.Bots
         {
             foreach (var teamMember in membersAdded)
             {
-                await turnContext.SendActivityAsync(MessageFactory.Text($"Welcome to the team {teamMember.GivenName} {teamMember.Surname}."), cancellationToken);
+                var mention = new Mention
+                {
+                    Mentioned = teamMember,
+                    Text = $"<at>{XmlConvert.EncodeName(teamMember.Name)}</at>",
+                };
+                var replyActivity = MessageFactory.Text($"Welcome to the team {mention.Text}.");
+                replyActivity.Entities = new List<Entity> { mention };
+                await turnContext.SendActivityAsync(replyActivity, cancellationToken);
             }
         }
 

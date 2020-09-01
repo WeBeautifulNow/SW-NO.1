@@ -13,7 +13,7 @@ namespace Microsoft.BotBuilderSamples.Bots
         internal static class ShowAllCommands
         {
             internal const string Name = "ShowAllCommands";
-            internal const string ShortName = "sac";
+            internal const string ShortName = "help";
         }
         internal static class MentionMe
         {
@@ -29,6 +29,11 @@ namespace Microsoft.BotBuilderSamples.Bots
         {
             internal const string Name = "PairingProgramming";
             internal const string ShortName = "pp";
+        }
+        internal static class NextMember
+        {
+            internal const string Name = "NextMember";
+            internal const string ShortName = "n";
         }
     }
 }

@@ -74,7 +74,7 @@ namespace Microsoft.BotBuilderSamples.Bots
             await turnContext.SendActivityAsync(replyActivity, cancellationToken);
         }
 
-        private async Task PairingProgramming(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
+        private async Task PairingProgrammingAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
             var teamsChannelId = turnContext.Activity.TeamsGetChannelId();
             if (teamsChannelId != _MMDTeamGenaralChannelID)
@@ -84,7 +84,7 @@ namespace Microsoft.BotBuilderSamples.Bots
             }
             var members = await TeamsInfo.GetMembersAsync(turnContext, cancellationToken);
             var membersList = members.ToList();
-            var mentionText = "Hello every, here is weekly pairing programing. Next is God's choice: ";
+            var mentionText = "Hello every, here is weekly pairing programing. Next is God's choice: \n\r";
             var mentionList = new List<Entity> { };
             Random rd = new Random();
             while (membersList.Count > 1)
@@ -105,7 +105,7 @@ namespace Microsoft.BotBuilderSamples.Bots
                     Text = $"<at>{XmlConvert.EncodeName(secondMember.Name)}</at>",
                 };
                 membersList.RemoveAt(secondIndex);
-                mentionText += firstMention.Text + " & " + secondMention.Text + "  ";
+                mentionText += firstMention.Text + " & " + secondMention.Text + "\n\r";
                 mentionList.Add(firstMention);
                 mentionList.Add(secondMention);
             }
@@ -121,7 +121,7 @@ namespace Microsoft.BotBuilderSamples.Bots
                 mentionText += "And " + lastMention.Text + ", feel free to join each group of them.";
                 mentionList.Add(lastMention);
             }
-            
+
             var replyActivity = MessageFactory.Text(mentionText);
             replyActivity.Entities = mentionList;
 

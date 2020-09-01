@@ -18,17 +18,21 @@ namespace Microsoft.BotBuilderSamples.Bots
     {
         static void ShowHelpInfo(ref string reply)
         {
-            reply = "search+: intunewiki,google,devops搜索，在机器人中以search+开头即可，比如 search+kusto" + "\n\r" +
-                "all+: 给所在team或者群聊中的每个人发一条私信，比如 all+大家好" + "\n\r" +
-                "roll: 在所在team或者群聊中随机抽中一个强者,比如 roll" + "\n\r";
-
+            reply = "Here are all commands: \n\r"
+                    + Constants.Search.Name + "\n\r"
+                    + Constants.SendMessageToAll.Name + "\n\r"
+                    + Constants.ShowAllCommands.Name + " or " + Constants.ShowAllCommands.ShortName + "\n\r"
+                    + Constants.MentionMe.Name + " or " + Constants.MentionMe.ShortName + "\n\r"
+                    + Constants.Roll.Name + " or " + Constants.Roll.ShortName + "\n\r"
+                    + Constants.PairingProgramming.Name + " or " + Constants.PairingProgramming.ShortName + "\n\r"
+                    + Constants.NextMember.Name + " or " + Constants.NextMember.ShortName + "\n\r";
         }
-        private async Task SendInfoToAllMember(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken, string sendInfo)
+        private async Task SendInfoToAllMemberAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken, string sendInfo)
         {
             var teamsChannelId = turnContext.Activity.TeamsGetChannelId();
             if (teamsChannelId is null)
             {
-                await turnContext.SendActivityAsync(MessageFactory.Text("This feature can only used in groups."), cancellationToken);
+                await turnContext.SendActivityAsync(MessageFactory.Text("This feature can only used in team."), cancellationToken);
                 return;
             }
             var teamInfo = turnContext.Activity.TeamsGetTeamInfo();
@@ -44,7 +48,7 @@ namespace Microsoft.BotBuilderSamples.Bots
                 var memberName = teamMember.UserPrincipalName;
                 var proactiveCard = new HeroCard
                 {
-                    Title = "Message from " + userName + " in group " + teamInfo.Name,
+                    Title = "Message from " + userName + " in team " + teamInfo.Name,
                     Text = sendInfo,
                     Buttons = new List<CardAction>
                     {
@@ -93,5 +97,43 @@ namespace Microsoft.BotBuilderSamples.Bots
             }
             await turnContext.SendActivityAsync(MessageFactory.Text("All messages have been sent."), cancellationToken);
         }
+        private async Task MentionNextMemberAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
+        {
+            var members = await TeamsInfo.GetMembersAsync(turnContext, cancellationToken);
+            var iterator = members.GetEnumerator();
+            var operatorName = turnContext.Activity.From.Name;
+            // nextMember is the preview element in iterator
+            var preMember = iterator.Current;
+
+            while (iterator.MoveNext())
+            {
+                TeamsChannelAccount current = iterator.Current;
+                if (current.Name == operatorName)
+                {
+                    break;
+                }
+                preMember = iterator.Current;
+            }
+            // If preMember is null, that means operator is the first element in iterator. So we need return the last element
+            if (preMember == null)
+            {
+                preMember = iterator.Current;
+                while (iterator.MoveNext())
+                {
+                    preMember = iterator.Current;
+                }
+            }
+
+            var mention = new Mention
+            {
+                Mentioned = preMember,
+                Text = $"<at>{XmlConvert.EncodeName(preMember.Name)}</at>",
+            };
+            var replyActivity = MessageFactory.Text($"It's your turn {mention.Text}.");
+            replyActivity.Entities = new List<Entity> { mention };
+
+            await turnContext.SendActivityAsync(replyActivity, cancellationToken);
+        }
+
     }
 }
