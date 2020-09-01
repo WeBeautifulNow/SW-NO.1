@@ -38,22 +38,25 @@ namespace Microsoft.BotBuilderSamples.Bots
 
             switch (turnContext.Activity.Text.Trim())
             {
-                case var someVal when someVal.StartsWith("search+"):
+                case var someVal when someVal.StartsWith(Constants.Search.Name):
                     var searchParams = someVal.Remove(0, someVal.IndexOf("+") + 1);
                     await SearchCardActivityAsync(turnContext, cancellationToken, searchParams);
                     break;
-                case var someVal when someVal.StartsWith("all+"):
+                case var someVal when someVal.StartsWith(Constants.SendMessageToAll.Name):
                     var sendInfo = someVal.Remove(0, someVal.IndexOf("+") + 1);
                     await SendInfoToAllMember(turnContext, cancellationToken, sendInfo);
                     break;
-                case "help":
+                case Constants.ShowAllCommands.Name:
+                case Constants.ShowAllCommands.ShortName:
                     ShowHelpInfo(ref reply);
                     await turnContext.SendActivityAsync(reply, cancellationToken: cancellationToken);
                     break;
-                case "MentionMe":
+                case Constants.MentionMe.Name:
+                case Constants.MentionMe.ShortName:
                     await MentionActivityAsync(turnContext, cancellationToken);
                     break;
-                case "roll":
+                case Constants.Roll.Name:
+                case Constants.Roll.ShortName:
                     await MentionRollActivityAsync(turnContext, cancellationToken);
                     break;
 
