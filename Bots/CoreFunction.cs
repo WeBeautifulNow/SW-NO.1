@@ -18,7 +18,7 @@ namespace Microsoft.BotBuilderSamples.Bots
     {
         static void ShowHelpInfo(ref string reply)
         {
-            reply = "Here are all commands: \n\r"
+            reply = "Here are all commands(some need permission): \n\r"
                     + Constants.Search.Name + "${search content}\n\r"
                     + Constants.SendMessageToAll.Name + "${message}, for example: all+hello every\n\r"
                     + Constants.ShowAllCommands.Name + " or " + Constants.ShowAllCommands.ShortName + "\n\r"
@@ -56,7 +56,7 @@ namespace Microsoft.BotBuilderSamples.Bots
                             {
                                 Type = ActionTypes.OpenUrl,
                                 Title = "Chat with " + userName,
-                                Value = "https://teams.microsoft.com/l/chat/0/0?users=" + memberName + "&message=Hi%20there%20"
+                                Value = "https://teams.microsoft.com/l/chat/0/0?users=" + _authorPrincipalName + "&message=Hi%20there%20"
                             },
                         new CardAction
                             {
