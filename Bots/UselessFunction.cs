@@ -29,5 +29,9 @@ namespace Microsoft.BotBuilderSamples.Bots
 
             await turnContext.SendActivityAsync(replyActivity, cancellationToken);
         }
+        static void Thanks(ref string reply)
+        {
+            reply = "Thanks WHY for help. bks 2 years sr people";
+        }
     }
 }

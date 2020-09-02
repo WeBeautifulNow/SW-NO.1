@@ -69,6 +69,10 @@ namespace Microsoft.BotBuilderSamples.Bots
                 case Constants.NextMember.ShortName:
                     await MentionNextMemberAsync(turnContext, cancellationToken);
                     break;
+                case Constants.Thanks.Name:
+                    Thanks(ref reply);
+                    await turnContext.SendActivityAsync(reply, cancellationToken: cancellationToken);
+                    break;
                 default:
                     await turnContext.SendActivityAsync(reply, cancellationToken: cancellationToken);
                     break;

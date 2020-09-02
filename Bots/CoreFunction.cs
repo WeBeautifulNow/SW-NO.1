@@ -19,8 +19,8 @@ namespace Microsoft.BotBuilderSamples.Bots
         static void ShowHelpInfo(ref string reply)
         {
             reply = "Here are all commands: \n\r"
-                    + Constants.Search.Name + "\n\r"
-                    + Constants.SendMessageToAll.Name + "\n\r"
+                    + Constants.Search.Name + "${search content}\n\r"
+                    + Constants.SendMessageToAll.Name + "${message}, for example: search+hello every\n\r"
                     + Constants.ShowAllCommands.Name + " or " + Constants.ShowAllCommands.ShortName + "\n\r"
                     + Constants.MentionMe.Name + " or " + Constants.MentionMe.ShortName + "\n\r"
                     + Constants.Roll.Name + " or " + Constants.Roll.ShortName + "\n\r"

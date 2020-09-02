@@ -35,5 +35,9 @@ namespace Microsoft.BotBuilderSamples.Bots
             internal const string Name = "NextMember";
             internal const string ShortName = "n";
         }
+        internal static class Thanks
+        {
+            internal const string Name = "Thanks";
+        }
     }
 }
