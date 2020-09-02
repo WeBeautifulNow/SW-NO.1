@@ -37,46 +37,33 @@ namespace Microsoft.BotBuilderSamples.Bots
             turnContext.Activity.RemoveRecipientMention();
 
             var reply = "Beyond the scope of my capabilities, please contact the developer to let me upgrade";
-
-            switch (turnContext.Activity.Text.Trim())
-            {
-                case var someVal when someVal.StartsWith(Constants.Search.Name):
-                    var searchParams = someVal.Remove(0, someVal.IndexOf("+") + 1);
-                    await SearchCardActivityAsync(turnContext, cancellationToken, searchParams);
-                    break;
-                case var someVal when someVal.StartsWith(Constants.SendMessageToAll.Name):
-                    var sendInfo = someVal.Remove(0, someVal.IndexOf("+") + 1);
-                    await SendInfoToAllMemberAsync(turnContext, cancellationToken, sendInfo);
-                    break;
-                case Constants.ShowAllCommands.Name:
-                case Constants.ShowAllCommands.ShortName:
-                    ShowHelpInfo(ref reply);
-                    await turnContext.SendActivityAsync(reply, cancellationToken: cancellationToken);
-                    break;
-                case Constants.MentionMe.Name:
-                case Constants.MentionMe.ShortName:
-                    await MentionActivityAsync(turnContext, cancellationToken);
-                    break;
-                case Constants.Roll.Name:
-                case Constants.Roll.ShortName:
-                    await MentionRollActivityAsync(turnContext, cancellationToken);
-                    break;
-                case Constants.PairingProgramming.Name:
-                case Constants.PairingProgramming.ShortName:
-                    await PairingProgrammingAsync(turnContext, cancellationToken);
-                    break;
-                case Constants.NextMember.Name:
-                case Constants.NextMember.ShortName:
-                    await MentionNextMemberAsync(turnContext, cancellationToken);
-                    break;
-                case Constants.Thanks.Name:
-                    Thanks(ref reply);
-                    await turnContext.SendActivityAsync(reply, cancellationToken: cancellationToken);
-                    break;
-                default:
-                    await turnContext.SendActivityAsync(reply, cancellationToken: cancellationToken);
-                    break;
-
+            var input = turnContext.Activity.Text.Trim();
+            var inputUpper = input.ToUpper();
+            if (inputUpper.StartsWith(Constants.Search.Name.ToUpper())) {
+                var searchParams = input.Remove(0, input.IndexOf("+") + 1);
+                await SearchCardActivityAsync(turnContext, cancellationToken, searchParams);
+            } else if (inputUpper.StartsWith(Constants.SendMessageToAll.Name.ToUpper())) {
+                var sendInfo = input.Remove(0, input.IndexOf("+") + 1);
+                await SendInfoToAllMemberAsync(turnContext, cancellationToken, sendInfo);
+            } else if (string.Equals(input, Constants.ShowAllCommands.Name, StringComparison.InvariantCultureIgnoreCase)
+                || string.Equals(input, Constants.ShowAllCommands.ShortName, StringComparison.InvariantCultureIgnoreCase)) {
+                ShowHelpInfo(ref reply);
+                await turnContext.SendActivityAsync(reply, cancellationToken: cancellationToken);
+            } else if (string.Equals(input, Constants.MentionMe.Name, StringComparison.InvariantCultureIgnoreCase)
+                || string.Equals(input, Constants.MentionMe.ShortName, StringComparison.InvariantCultureIgnoreCase)) {
+                await MentionActivityAsync(turnContext, cancellationToken);
+            } else if (string.Equals(input, Constants.Roll.Name, StringComparison.InvariantCultureIgnoreCase)
+                || string.Equals(input, Constants.Roll.ShortName, StringComparison.InvariantCultureIgnoreCase)) {
+                await MentionRollActivityAsync(turnContext, cancellationToken);
+            } else if (string.Equals(input, Constants.PairingProgramming.Name, StringComparison.InvariantCultureIgnoreCase)
+                || string.Equals(input, Constants.PairingProgramming.ShortName, StringComparison.InvariantCultureIgnoreCase)) {
+                await PairingProgrammingAsync(turnContext, cancellationToken);
+            } else if (string.Equals(input, Constants.NextMember.Name, StringComparison.InvariantCultureIgnoreCase)
+              || string.Equals(input, Constants.NextMember.ShortName, StringComparison.InvariantCultureIgnoreCase)) {
+                await MentionNextMemberAsync(turnContext, cancellationToken);
+            } else if (string.Equals(input, Constants.Thanks.Name, StringComparison.InvariantCultureIgnoreCase)) {
+                Thanks(ref reply);
+                await turnContext.SendActivityAsync(reply, cancellationToken: cancellationToken);
             }
         }
 

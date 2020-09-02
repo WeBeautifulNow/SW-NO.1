@@ -20,7 +20,7 @@ namespace Microsoft.BotBuilderSamples.Bots
         {
             reply = "Here are all commands: \n\r"
                     + Constants.Search.Name + "${search content}\n\r"
-                    + Constants.SendMessageToAll.Name + "${message}, for example: search+hello every\n\r"
+                    + Constants.SendMessageToAll.Name + "${message}, for example: all+hello every\n\r"
                     + Constants.ShowAllCommands.Name + " or " + Constants.ShowAllCommands.ShortName + "\n\r"
                     + Constants.MentionMe.Name + " or " + Constants.MentionMe.ShortName + "\n\r"
                     + Constants.Roll.Name + " or " + Constants.Roll.ShortName + "\n\r"
